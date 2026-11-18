@@ -74,7 +74,7 @@ IST = timezone(timedelta(hours=5, minutes=30))
 
 EMOJI_POOL = ["🪾", "🪺", "🪹", "🍃", "🍂", "🍁", "🍀", "☘️", "🌿", "🌾", "🌵", "🌴", "🌳", "🌲", "🪴", "🌱", "⚘️", "🪻", "🌷", "🌼", "🌻", "🌺", "🥀", "🌹", "🏵", "🪷", "🌸", "💮"]
 GC_EMOJI = "🪼"
-FOOTER = "\n\n\n\nScript by - ρ 𝕣 ꪜ 𝕣 अब्बू ☽"
+SIGNATURE_TEXT = "\n\n\n\nρ 𝕣 ꪜ 𝕣 अब्बू ☽"
 
 UA_POOL = [
     "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
@@ -327,7 +327,7 @@ class SessionWorker:
         if self._msg_counter >= self._next_sig_target:
             self._msg_counter = 0
             self._next_sig_target = random.randint(5, 10)
-            return f"{num}\n\n{body}{FOOTER}"
+            return f"{num}\n\n{body}{SIGNATURE_TEXT}"
         
         return f"{num}\n\n{body}"
 
@@ -458,7 +458,6 @@ class SessionWorker:
 
         try:
             while not self.stop_event.is_set():
-                # 6 to 8 seconds delay range configured here
                 d_min = max(0.01, float(self.data.get("delay_min", 6.0)))
                 d_max = max(d_min, float(self.data.get("delay_max", 8.0)))
                 interval = random.uniform(d_min, d_max)
@@ -528,6 +527,7 @@ class SessionWorker:
 
             for offset in range(n):
                 i = (idx + offset) % n
+                sock = None
                 try:
                     with self.socket_locks[i]:
                         sock = self.sockets[i]
@@ -539,15 +539,27 @@ class SessionWorker:
                         with self._stats_lock:
                             self.stats["sent"] += 1
                     else:
+                        err_str = str(res)
+                        # Check if socket dropped or needs reconnect
+                        if "closed" in err_str.lower() or "not connected" in err_str.lower() or "socket" in err_str.lower():
+                            print(f"[{self.data.get('session_name', '?')}] Socket {i+1} dropped during send. Reconnecting...", flush=True)
+                            threading.Thread(target=self._rotate_socket_at, args=(i,), daemon=True).start()
+                        
                         with self._stats_lock:
                             self.stats["failed"] += 1
-                            self.stats["last_error"] = str(res)[:100]
+                            self.stats["last_error"] = err_str[:100]
                     return
 
                 except Exception as e:
                     err_str = str(e).lower()
                     with self._stats_lock:
                         self.stats["last_error"] = f"send@{i}: {err_str[:80]}"
+                    
+                    # Force reconnect socket on drop/timeout exception
+                    if any(k in err_str for k in ("timeout", "timed out", "closed", "not connected", "broken pipe")):
+                        print(f"[{self.data.get('session_name', '?')}] Exception on socket {i+1}: {err_str}. Triggering reconnect.", flush=True)
+                        threading.Thread(target=self._rotate_socket_at, args=(i,), daemon=True).start()
+
                     if "timeout" in err_str or "timed out" in err_str:
                         with self._stats_lock:
                             self.stats["failed"] += 1
@@ -648,7 +660,6 @@ class SessionWorker:
 
     def _rename_loop(self):
         while not self.stop_event.is_set():
-            # 10 to 20 minutes (600 to 1200 seconds) rename delay range
             r_min = max(1.0, float(self.data.get("rename_min", 600.0)))
             r_max = max(r_min, float(self.data.get("rename_max", 1200.0)))
             if self.stop_event.wait(random.uniform(r_min, r_max)):
