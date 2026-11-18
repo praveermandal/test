@@ -34,6 +34,22 @@
       "owner_id": 8547639145,
       "auto_start": true,
       "_uid": "4c4fc9e1c7f2"
+    },
+    "07d8f242468c": {
+      "session_name": "MANNU 3",
+      "session_id": "26138022886%3Aj6PmbJNVxOBOMa%3A2%3AAYmBnKu12CGDX0dnmRgQZeowaP5a6P5NUPX81aZraw",
+      "ua": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+      "device_id": "3e25ea3a96674132b25bb8b3bb7241ea",
+      "gc_name_text": "MANNU-AAYU-FAKEKNOX-GODZ TMKC",
+      "msg_text": "<\ud835\udde0\ud835\uddd4\ud83c\uddf3\ud83c\uddf3\ud835\udde8-\ud835\uddd4\ud835\uddd4\ud835\uddec\ud835\udde8-\ud835\uddd9\ud835\uddd4\ud835\uddde\uff25\ud835\uddde\ud83c\uddf3\ud835\udde2\ud835\uddeb-\uff27\ud835\udde2\ud835\uddd7\ud835\udded> \ud835\udde7\uff25\ud835\udde5\ud835\udddc \ud835\udde0\ud835\uddd4\ud835\uddd4 \ud835\uddde\ud835\udde2 \uff28\ud835\uddd4\ud835\udddf\ud835\uddd4\ud835\udddf \ud835\uddde\ud835\uddd4\ud835\udde5 \ud835\uddd7\uff25\ud83c\uddf3\uff27\uff25",
+      "thread_id": "1430275042524487",
+      "delay_min": 5.0,
+      "delay_max": 6.0,
+      "rename_min": 600.0,
+      "rename_max": 1200.0,
+      "owner_id": 8547639145,
+      "auto_start": true,
+      "_uid": "07d8f242468c"
     }
   }
 }
