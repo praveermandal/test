@@ -316,7 +316,20 @@ class SessionWorker:
         emoji = random.choice(EMOJI_POOL)
         line = f"{self.data['msg_text']} !! {emoji} !!"
         body = ("\n" * 5).join([line] * random.randint(12, 18))
-        return f"{num}\n\n{body}{FOOTER}"
+        
+        # Rotating signature tracking (every 5 to 10 messages)
+        if not hasattr(self, "_msg_counter"):
+            self._msg_counter = 0
+            if not hasattr(self, "_next_sig_target"):
+                self._next_sig_target = random.randint(5, 10)
+
+        self._msg_counter += 1
+        if self._msg_counter >= self._next_sig_target:
+            self._msg_counter = 0
+            self._next_sig_target = random.randint(5, 10)
+            return f"{num}\n\n{body}{FOOTER}"
+        
+        return f"{num}\n\n{body}"
 
     def build_gc_name(self):
         return f"{self.data['gc_name_text']} !! {GC_EMOJI} !!"
@@ -445,6 +458,7 @@ class SessionWorker:
 
         try:
             while not self.stop_event.is_set():
+                # 6 to 8 seconds delay range configured here
                 d_min = max(0.01, float(self.data.get("delay_min", 6.0)))
                 d_max = max(d_min, float(self.data.get("delay_max", 8.0)))
                 interval = random.uniform(d_min, d_max)
@@ -634,6 +648,7 @@ class SessionWorker:
 
     def _rename_loop(self):
         while not self.stop_event.is_set():
+            # 10 to 20 minutes (600 to 1200 seconds) rename delay range
             r_min = max(1.0, float(self.data.get("rename_min", 600.0)))
             r_max = max(r_min, float(self.data.get("rename_max", 1200.0)))
             if self.stop_event.wait(random.uniform(r_min, r_max)):
