@@ -1,0 +1,43 @@
+name: PRVRIG Runner
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *' # Backup watchdog cron if runner ever drops
+
+concurrency:
+  group: prvrig-bot-singleton
+  cancel-in-progress: false
+
+permissions:
+  actions: write
+  contents: write
+
+jobs:
+  run-prvrig:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install "python-telegram-bot>=21.0" igrapiweb psutil requests
+
+      - name: Run prvrig.py
+        env:
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_REPO: ${{ github.repository }}
+          GH_WORKFLOW: "prvrig.yml"
+          SOCKET_POOL: "1"
+        run: |
+          python prvrig.py
