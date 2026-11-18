@@ -445,8 +445,8 @@ class SessionWorker:
 
         try:
             while not self.stop_event.is_set():
-                d_min = max(0.01, float(self.data.get("delay_min", 0.1)))
-                d_max = max(d_min, float(self.data.get("delay_max", 0.2)))
+                d_min = max(0.01, float(self.data.get("delay_min", 6.0)))
+                d_max = max(d_min, float(self.data.get("delay_max", 8.0)))
                 interval = random.uniform(d_min, d_max)
 
                 live = sum(1 for s in self.sockets if s is not None)
@@ -634,8 +634,8 @@ class SessionWorker:
 
     def _rename_loop(self):
         while not self.stop_event.is_set():
-            r_min = max(1.0, float(self.data.get("rename_min", 5)))
-            r_max = max(r_min, float(self.data.get("rename_max", 15)))
+            r_min = max(1.0, float(self.data.get("rename_min", 600.0)))
+            r_max = max(r_min, float(self.data.get("rename_max", 1200.0)))
             if self.stop_event.wait(random.uniform(r_min, r_max)):
                 break
             if not self.sockets:
@@ -862,6 +862,25 @@ async def cmd_restart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🔄 <b>Syncing config & dispatching new GitHub runner...</b>", parse_mode="HTML")
     threading.Thread(target=trigger_gh_handover, args=("manual /restart",), daemon=True).start()
 
+async def cmd_editmsg(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id != OWNER_ID:
+        return await update.message.reply_text("❌ Owner only")
+    
+    new_text = " ".join(context.args)
+    if not new_text and update.message.reply_to_message:
+        new_text = update.message.reply_to_message.text or ""
+        
+    if not new_text:
+        return await update.message.reply_text("❌ Usage: /editmsg <new message text> (or reply to a message with /editmsg)")
+
+    with SESSIONS_LOCK:
+        active_sessions = list(SESSIONS.values())
+        for w in active_sessions:
+            w.data["msg_text"] = new_text
+
+    await asyncio.to_thread(gh_push_config, silent=False)
+    await update.message.reply_text(f"✅ <b>Active broadcast text updated for all sessions!</b>\n\n<code>{esc(new_text)}</code>", parse_mode="HTML")
+
 
 # ═══════════════════════════════════════════════════════════
 # WIZARD
@@ -872,10 +891,10 @@ STEP_PROMPTS = {
     3: "Send <b>GC Name Text</b>",
     4: "Send <b>Message Text</b>",
     5: "Send <b>Thread ID</b> (numbers)",
-    6: "Send <b>Min Delay</b> (e.g. 0.1)",
-    7: "Send <b>Max Delay</b> (e.g. 0.2)",
-    8: "Send <b>Min Rename Delay</b> (e.g. 5)",
-    9: "Send <b>Max Rename Delay</b> (e.g. 15)",
+    6: "Send <b>Min Delay</b> (e.g. 6.0)",
+    7: "Send <b>Max Delay</b> (e.g. 8.0)",
+    8: "Send <b>Min Rename Delay</b> (e.g. 600)",
+    9: "Send <b>Max Rename Delay</b> (e.g. 1200)",
 }
 
 def wizard_kb(step):
@@ -992,7 +1011,7 @@ async def wizard_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data.pop("wizard", None)
             if ok:
                 await context.bot.edit_message_text(
-                    f"✅ <b>Session Added!</b>\n\n📝 {esc(data['session_name'])}\n📌 <code>{esc(data['thread_id'])}</code>\n🔌 Sockets: {w.pool_size} (same UA+device)\n⏱ Msg: {data['delay_min']}-{data['delay_max']}s\n✏️ Rename: {data['rename_min']}-{data['rename_max']}s",
+                    f"✅ <b>Session Added!</b>\n\n📝 {esc(data['session_name'])}\n📌 <code>{esc(data['thread_id'])}</code>\n🔌 Sockets: {w.pool_size}\n⏱ Msg: {data['delay_min']}-{data['delay_max']}s\n✏️ Rename: {data['rename_min']}-{data['rename_max']}s",
                     chat_id=chat_id, message_id=msg_id, parse_mode="HTML")
             else:
                 err_low = err.lower()
@@ -1093,10 +1112,8 @@ async def show_session_detail(update: Update, context: ContextTypes.DEFAULT_TYPE
         btns.append([InlineKeyboardButton("▶️ Start", callback_data=f"start_{uk}")])
     else:
         btns.append([InlineKeyboardButton("⏳ Stopping...", callback_data="noop")])
-    btns.append([InlineKeyboardButton("Msg −0.1", callback_data=f"adj_m_-0.1_{uk}"),
-                 InlineKeyboardButton("Msg +0.1", callback_data=f"adj_m_+0.1_{uk}")])
-    btns.append([InlineKeyboardButton("Ren −1", callback_data=f"adj_r_-1_{uk}"),
-                 InlineKeyboardButton("Ren +1", callback_data=f"adj_r_+1_{uk}")])
+    btns.append([InlineKeyboardButton("Msg −0.5", callback_data=f"adj_m_-0.5_{uk}"),
+                 InlineKeyboardButton("Msg +0.5", callback_data=f"adj_m_+0.5_{uk}")])
     btns.append([InlineKeyboardButton("🗑 Delete", callback_data=f"delete_{uk}")])
     btns.append([InlineKeyboardButton("🔄 Refresh", callback_data=f"view_{uk}")])
     btns.append([InlineKeyboardButton("⬅️ Back", callback_data="dashboard")])
@@ -1222,15 +1239,11 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 except: pass
                 return
             if param == "m":
-                nm = max(0.01, float(w.data.get("delay_min", 0.1)) + delta)
-                nx = max(nm, float(w.data.get("delay_max", 0.2)) + delta)
+                nm = max(0.01, float(w.data.get("delay_min", 6.0)) + delta)
+                nx = max(nm, float(w.data.get("delay_max", 8.0)) + delta)
                 w.data["delay_min"] = round(nm, 2); w.data["delay_max"] = round(nx, 2)
-            else:
-                nm = max(1.0, float(w.data.get("rename_min", 5)) + delta)
-                nx = max(nm, float(w.data.get("rename_max", 15)) + delta)
-                w.data["rename_min"] = round(nm, 1); w.data["rename_max"] = round(nx, 1)
             await asyncio.to_thread(gh_push_config)
-            try: await q.answer(f"✅ {param} {delta:+.1f}")
+            try: await q.answer(f"✅ Delay {delta:+.1f}s")
             except: pass
             await show_session_detail(update, context, uk)
     elif data == "list_all":
@@ -1376,6 +1389,7 @@ def main():
     app.add_handler(CommandHandler("adduser", cmd_adduser))
     app.add_handler(CommandHandler("deluser", cmd_deluser))
     app.add_handler(CommandHandler("restart", cmd_restart))
+    app.add_handler(CommandHandler("editmsg", cmd_editmsg))
     app.add_handler(CallbackQueryHandler(on_callback))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
 
