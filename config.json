@@ -98,6 +98,22 @@
       "owner_id": 8547639145,
       "auto_start": true,
       "_uid": "1c8215a29841"
+    },
+    "b035fdeffc24": {
+      "session_name": "TRB CHUDAI 2",
+      "session_id": "80985776518%3As4fJ3s0m4LUDxM%3A12%3AAYkaRnHivKyxXujFxVnfxI90bm4mpMYCwMO0ObCdkg",
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15",
+      "device_id": "792926f4f1df4d36a85edceda9046d48",
+      "gc_name_text": "TRB TMKC",
+      "msg_text": "<\ud835\uddd6\uff28\ud835\udde8\ud83c\uddf3\ud83c\uddf3\ud835\uddec-\ud835\udde3\ud835\uddd4\ud835\uddde\ud835\uddd4\ud835\udded\ud835\uddd4-\ud835\udde7\ud835\uddd4\ud835\uddeb\ud835\udddc-\uff28\ud835\uddd4\ud835\udde5\ud835\udddc\ud835\udde6\uff28-\ud835\uddec\ud835\uddd4\ud835\udde6\uff28-\ud835\udde7\ud835\udde5\ud835\uddd5> \ud835\udde7\ud835\udde8\ud835\udde0\uff28\ud835\uddd4\ud835\udde5\ud835\udddc \ud835\udde0\ud835\uddd4\ud835\uddd4 \ud835\udde0\ud835\uddd4\ud835\udde5 \ud835\uddd7\uff25\ud83c\uddf3\uff27\uff25!",
+      "thread_id": "1786421529154110",
+      "delay_min": 15.0,
+      "delay_max": 20.0,
+      "rename_min": 600.0,
+      "rename_max": 1200.0,
+      "owner_id": 8547639145,
+      "auto_start": true,
+      "_uid": "b035fdeffc24"
     }
   }
 }
