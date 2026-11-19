@@ -66,6 +66,22 @@
       "owner_id": 8547639145,
       "auto_start": true,
       "_uid": "cc015cc0675b"
+    },
+    "3a521e345551": {
+      "session_name": "PRATIK CUDAI",
+      "session_id": "34136398002%3AFBV7QxvKDBH25y%3A25%3AAYkyUQcmvqnm53TDXp0Mevhj3KECyyX8YavnKjSmkA",
+      "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+      "device_id": "94f4c594398c4dc29e9ada90884893c1",
+      "gc_name_text": "PRATIK TMKC",
+      "msg_text": "\ud835\udde3\ud835\udde5\ud835\uddd4\ud835\udde7\ud835\udddc\ud835\uddf8-\ud835\udde6\ud835\udde8\ud835\udde5\ud835\uddd4\ud835\udddd-\ud835\uddd4\ud835\uddd5\uff28\ud835\udddc-\ud835\udde6\ud835\udde8\ud835\udddd\ud835\uddd4\ud835\udddf-\ud835\uddd7\ud835\udde5\uff25\ud835\uddd4\ud835\udde0-\ud835\uddd9\ud835\uddd7-\ud835\udde6\ud835\udddc\ud83c\uddf3\ud835\udddc\ud835\udde6\ud835\udde7\uff25\ud835\udde5-\ud835\uddd5\ud835\udde8\ud835\udddf\ud835\udddf\uff25\ud835\udde5-\ud835\udddf\uff25\ud835\udde2-\ud835\uddd4\ud835\uddec\ud835\uddd4\ud83c\uddf3-\ud835\udde3\ud835\udde5\uff25\ud835\udde0-\ud835\uddd4\ud835\udde6\uff28\ud835\udde7\ud835\udde2\ud83c\uddf3---\ud835\udde7\uff25\ud835\udde5\ud835\uddec \ud835\udde0\ud835\uddd4\ud835\uddd4 \ud835\uddde\ud835\udde2 \uff28\ud835\uddd4\ud835\udddf\ud835\uddd4\ud835\udddf \ud835\uddde\ud835\udde5 \ud835\uddd7\uff25\ud83c\uddf3\uff27\uff25",
+      "thread_id": "947828947911715",
+      "delay_min": 15.0,
+      "delay_max": 20.0,
+      "rename_min": 600.0,
+      "rename_max": 1200.0,
+      "owner_id": 8547639145,
+      "auto_start": true,
+      "_uid": "3a521e345551"
     }
   }
 }
