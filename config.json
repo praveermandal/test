@@ -50,6 +50,22 @@
       "owner_id": 8547639145,
       "auto_start": true,
       "_uid": "07d8f242468c"
+    },
+    "5cdb1bb541c1": {
+      "session_name": "LOL",
+      "session_id": "54105502912%3Ayxc1Ow3vgE6sKd%3A18%3AAYl1MuzGnsnaYA9BwpWkjtuLziNuHXFJCzynNZFgxQ",
+      "ua": "Mozilla/5.0 (Linux; Android 13; CPH2451) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+      "device_id": "620285f058b441c19b7be05d26abc380",
+      "gc_name_text": "PRATIK TMKC",
+      "msg_text": "\ud835\udde3\ud835\udde5\ud835\uddd4\ud835\udde7\ud835\udddc\ud835\uddf8-\ud835\udde6\ud835\udde8\ud835\udde5\ud835\uddd4\ud835\udddd-\ud835\uddd4\ud835\uddd5\uff28\ud835\udddc-\ud835\udde6\ud835\udde8\ud835\udddd\ud835\uddd4\ud835\udddf-\ud835\uddd7\ud835\udde5\uff25\ud835\uddd4\ud835\udde0-\ud835\uddd9\ud835\uddd7-\ud835\udde6\ud835\udddc\ud83c\uddf3\ud835\udddc\ud835\udde6\ud835\udde7\uff25\ud835\udde5-\ud835\uddd5\ud835\udde8\ud835\udddf\ud835\udddf\uff25\ud835\udde5-\ud835\udddf\uff25\ud835\udde2-\ud835\uddd4\ud835\uddec\ud835\uddd4\ud83c\uddf3-\ud835\udde3\ud835\udde5\uff25\ud835\udde0-\ud835\uddd4\ud835\udde6\uff28\ud835\udde7\ud835\udde2\ud83c\uddf3---\ud835\udde7\uff25\ud835\udde5\ud835\uddec \ud835\udde0\ud835\uddd4\ud835\uddd4 \ud835\uddde\ud835\udde2 \uff28\ud835\uddd4\ud835\udddf\ud835\uddd4\ud835\udddf \ud835\uddde\ud835\udde5 \ud835\uddd7\uff25\ud83c\uddf3\uff27\uff25",
+      "thread_id": "947828947911715",
+      "delay_min": 10.0,
+      "delay_max": 12.0,
+      "rename_min": 600.0,
+      "rename_max": 1200.0,
+      "owner_id": 8547639145,
+      "auto_start": true,
+      "_uid": "5cdb1bb541c1"
     }
   }
 }
